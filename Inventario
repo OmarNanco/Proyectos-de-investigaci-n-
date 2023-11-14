@@ -1,0 +1,79 @@
+// Paso 1: Inicializar la matriz del inventario con 10 productos
+let matrizInventario = [
+    { producto: "Producto 1", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 2", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 3", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 4", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 5", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 6", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 7", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 8", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 9", cantidad: getRandomInt(1, 20), surtido: [] },
+    { producto: "Producto 10", cantidad: getRandomInt(1, 20), surtido: [] }
+];
+
+// Paso 2: Establecer el umbral de escasez
+const umbralEscasez = 10;
+
+// Paso 3: Definir la función para verificar escasez
+function verificarEscasez(matrizInventario) {
+    // Paso 4: Iterar a través de cada fila en la matriz del inventario
+    for (let i = 0; i < matrizInventario.length; i++) {
+        let producto = matrizInventario[i].producto;
+        let cantidad = matrizInventario[i].cantidad;
+
+        // Paso 5: Verificar si la cantidad está por debajo del umbral de escasez
+        if (cantidad <= umbralEscasez) {
+            // Paso 6: Llamar a la función para ordenar la lista de reabastecimiento usando burbuja
+            bubbleSort(matrizInventario, i);
+            // Paso 7: Llamar a la función para reabastecer el producto más necesario
+            ordenarListaDeReabastecimiento(matrizInventario, i);
+        }
+    }
+}
+
+// Paso 8: Implementar el método de burbuja para ordenar la lista de productos surtidos
+function bubbleSort(matrizInventario, indiceProducto) {
+    let surtido = matrizInventario[indiceProducto].surtido;
+    let n = surtido.length;
+
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (surtido[j].cantidad < surtido[j + 1].cantidad) {
+                // Intercambiar elementos si están en el orden incorrecto
+                let temp = surtido[j];
+                surtido[j] = surtido[j + 1];
+                surtido[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Paso 9: Definir la función para ordenar la lista de reabastecimiento
+function ordenarListaDeReabastecimiento(matrizInventario, indiceProducto) {
+    // Paso 10: Verificar si la cantidad del producto más necesario está por debajo del umbral
+    if (matrizInventario[indiceProducto].cantidad <= umbralEscasez) {
+        let producto = matrizInventario[indiceProducto].producto;
+        console.log(`Reabastecer ${producto}`);
+        // Paso 11: Aumentar la cantidad en 50 unidades
+        matrizInventario[indiceProducto].cantidad += 50;
+        // Paso 12: Generar aleatoriamente la cantidad surtida y agregar el producto surtido a la lista
+        let cantidadSurtida = getRandomInt(1, 20);
+        matrizInventario[indiceProducto].surtido.push({ cantidad: cantidadSurtida });
+        console.log(`Surtido de ${producto}: ${cantidadSurtida} unidades`);
+        // Paso 13: Llamar recursivamente a la función con el mismo índice de producto
+        ordenarListaDeReabastecimiento(matrizInventario, indiceProducto);
+    }
+}
+
+// Paso 14: Llamar a la función para verificar la escasez
+verificarEscasez(matrizInventario);
+
+// Paso 15: Imprimir la matriz del inventario después del proceso
+console.log("Matriz del Inventario después del proceso:");
+console.table(matrizInventario);
+
+// Función auxiliar para generar números enteros aleatorios en un rango dado
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
